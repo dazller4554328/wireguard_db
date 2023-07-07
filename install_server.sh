@@ -1,13 +1,19 @@
 #!/bin/bash
-SERVER_NAME=$SERVER_NAME
-ROOT_PASSWORD=$ROOT_PASSWORD
-SERVER_IP=$SERVER_IP
-ADMIN_EMAIL=$ADMIN_EMAIL
-LOCAL_USERNAME=$LOCAL_USERNAME
-LOCAL_PASSWORD=$LOCAL_PASSWORD
-SCRIPT_USERNAME=$SCRIPT_USERNAME
-SCRIPT_PASSWORD=$SCRIPT_PASSWORD
-API_KEY=$API_KEY
+if [ ! -f "/root/wireguard_db/variables.json" ]; then
+    echo "Variables file does not exist. Please run the PHP script first."
+    exit 1
+fi
+
+# Read variables from the JSON file
+SERVER_NAME=$(jq -r '.SERVER_NAME' /root/wireguard_db/variables.json)
+ROOT_PASSWORD=$(jq -r '.ROOT_PASSWORD' /root/wireguard_db/variables.json)
+SERVER_IP=$(jq -r '.SERVER_IP' /root/wireguard_db/variables.json)
+ADMIN_EMAIL=$(jq -r '.ADMIN_EMAIL' /root/wireguard_db/variables.json)
+LOCAL_USERNAME=$(jq -r '.LOCAL_USERNAME' /root/wireguard_db/variables.json)
+LOCAL_PASSWORD=$(jq -r '.LOCAL_PASSWORD' /root/wireguard_db/variables.json)
+SCRIPT_USERNAME=$(jq -r '.SCRIPT_USERNAME' /root/wireguard_db/variables.json)
+SCRIPT_PASSWORD=$(jq -r '.SCRIPT_PASSWORD' /root/wireguard_db/variables.json)
+API_KEY=$(jq -r '.API_KEY' /root/wireguard_db/variables.json)
 # Update system packages
 sudo apt update && sudo apt upgrade -y
 
