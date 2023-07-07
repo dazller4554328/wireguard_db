@@ -1,21 +1,13 @@
 #!/bin/bash
-
-if [ ! -f "variables.json" ]; then
-    echo "Variables file does not exist. Please run the PHP script first."
-    exit 1
-fi
-
-# Read variables from the JSON file
-SERVER_NAME=$(jq -r '.SERVER_NAME' variables.json)
-ROOT_PASSWORD=$(jq -r '.ROOT_PASSWORD' variables.json)
-SERVER_IP=$(jq -r '.SERVER_IP' variables.json)
-ADMIN_EMAIL=$(jq -r '.ADMIN_EMAIL' variables.json)
-LOCAL_USERNAME=$(jq -r '.LOCAL_USERNAME' variables.json)
-LOCAL_PASSWORD=$(jq -r '.LOCAL_PASSWORD' variables.json)
-SCRIPT_USERNAME=$(jq -r '.SCRIPT_USERNAME' variables.json)
-SCRIPT_PASSWORD=$(jq -r '.SCRIPT_PASSWORD' variables.json)
-API_KEY=$(jq -r '.API_KEY' variables.json)
-
+SERVER_NAME=$SERVER_NAME
+ROOT_PASSWORD=$ROOT_PASSWORD
+SERVER_IP=$SERVER_IP
+ADMIN_EMAIL=$ADMIN_EMAIL
+LOCAL_USERNAME=$LOCAL_USERNAME
+LOCAL_PASSWORD=$LOCAL_PASSWORD
+SCRIPT_USERNAME=$SCRIPT_USERNAME
+SCRIPT_PASSWORD=$SCRIPT_PASSWORD
+API_KEY=$API_KEY
 # Update system packages
 sudo apt update && sudo apt upgrade -y
 
