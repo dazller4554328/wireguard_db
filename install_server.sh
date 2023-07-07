@@ -24,7 +24,7 @@ sudo mysql -e "CREATE USER '$scriptUsername'@'$serverIp' IDENTIFIED BY '$scriptP
 sudo mysql -e "GRANT ALL PRIVILEGES ON wire_db.* TO '$scriptUsername'@'$serverIp' WITH GRANT OPTION"
 
 # Import tables from create_tables.sql
-sudo mysql -u "$localUsername" -p"$localPassword" wire_db < create_tables.sql
+sudo mysql -u "$localUsername" -p"$localPassword" wire_db < /root/wireguard_db/create_tables.sql
 
 # Create /opt/wireguard directory
 mkdir -p /opt/xrwireguard
