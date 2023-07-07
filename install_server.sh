@@ -1,16 +1,20 @@
 #!/bin/bash
 
-# Variables passed from php
-rootPassword="$rootPassword"
-serverName="$serverName"
-serverIp="$serverIp"
-adminEmail="$adminEmail"
-logFile="$logFile"
-localUsername="$localUsername"
-localPassword="$localPassword"
-scriptUsername="$scriptUsername"
-scriptPassword="$scriptPassword"
-apiKey=$(tr -dc A-Za-z0-9 </dev/urandom | head -c 32 ; echo '')
+if [ ! -f "variables.json" ]; then
+    echo "Variables file does not exist. Please run the PHP script first."
+    exit 1
+fi
+
+# Read variables from the JSON file
+SERVER_NAME=$(jq -r '.SERVER_NAME' variables.json)
+ROOT_PASSWORD=$(jq -r '.ROOT_PASSWORD' variables.json)
+SERVER_IP=$(jq -r '.SERVER_IP' variables.json)
+ADMIN_EMAIL=$(jq -r '.ADMIN_EMAIL' variables.json)
+LOCAL_USERNAME=$(jq -r '.LOCAL_USERNAME' variables.json)
+LOCAL_PASSWORD=$(jq -r '.LOCAL_PASSWORD' variables.json)
+SCRIPT_USERNAME=$(jq -r '.SCRIPT_USERNAME' variables.json)
+SCRIPT_PASSWORD=$(jq -r '.SCRIPT_PASSWORD' variables.json)
+API_KEY=$(jq -r '.API_KEY' variables.json)
 
 # Update system packages
 sudo apt update && sudo apt upgrade -y
