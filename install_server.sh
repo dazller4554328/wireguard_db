@@ -5,15 +5,15 @@ if [ ! -f "/root/wireguard_db/variables.json" ]; then
 fi
 
 # Read variables from the JSON file
-SERVER_NAME=$(jq -r '.SERVER_NAME' /root/wireguard_db/variables.json)
-ROOT_PASSWORD=$(jq -r '.ROOT_PASSWORD' /root/wireguard_db/variables.json)
-SERVER_IP=$(jq -r '.SERVER_IP' /root/wireguard_db/variables.json)
-ADMIN_EMAIL=$(jq -r '.ADMIN_EMAIL' /root/wireguard_db/variables.json)
-LOCAL_USERNAME=$(jq -r '.LOCAL_USERNAME' /root/wireguard_db/variables.json)
-LOCAL_PASSWORD=$(jq -r '.LOCAL_PASSWORD' /root/wireguard_db/variables.json)
-SCRIPT_USERNAME=$(jq -r '.SCRIPT_USERNAME' /root/wireguard_db/variables.json)
-SCRIPT_PASSWORD=$(jq -r '.SCRIPT_PASSWORD' /root/wireguard_db/variables.json)
-API_KEY=$(jq -r '.API_KEY' /root/wireguard_db/variables.json)
+serverName=$(jq -r '.serverName' /root/wireguard_db/variables.json)
+rootPassword=$(jq -r '.rootPassword' /root/wireguard_db/variables.json)
+serverIp=$(jq -r '.serverIp' /root/wireguard_db/variables.json)
+adminEmail=$(jq -r '.adminEmail' /root/wireguard_db/variables.json)
+localUsername=$(jq -r '.localUsername' /root/wireguard_db/variables.json)
+localPassword=$(jq -r '.LocalPassword' /root/wireguard_db/variables.json)
+scriptUsername=$(jq -r '.scriptUsername' /root/wireguard_db/variables.json)
+scriptPassword=$(jq -r '.scriptPassword' /root/wireguard_db/variables.json)
+apiKey=$(jq -r '.apiKey' /root/wireguard_db/variables.json)
 # Update system packages
 sudo apt update && sudo apt upgrade -y
 
