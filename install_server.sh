@@ -33,7 +33,7 @@ sudo mysql -e "GRANT ALL PRIVILEGES ON wire_db.* TO '$scriptUsername'@'$serverIp
 sudo mysql -u "$localUsername" -p"$localPassword" wire_db < /root/wireguard_db/create_tables.sql
 
 # Create /opt/wireguard directory
-mkdir -p /opt/xrwireguard
+mkdir -p /opt/wireguard
 
 # Create config.php file
 sudo bash -c "cat > /opt/wireguard/config.php <<EOF
@@ -47,10 +47,15 @@ sudo bash -c "cat > /opt/wireguard/config.php <<EOF
 ?>
 EOF"
 
-# Download WireGuard setup script
-sudo apt-get install -y wget
-wget -O wireguard.sh https://get.vpnsetup.net/wg
-bash wireguard.sh --auto
+sudo apt install wget -y
+# Copy the wireguard.sh script to the root folder
+sudo wget -O /root/wireguard.sh https://get.vpnsetup.net/wg
+
+# Provide execution permissions to the script
+sudo chmod +x /root/wireguard.sh
+
+# Run the script with the --auto option
+sudo bash /root/wireguard.sh --auto
 
 # Extract WireGuard public key
 PUBLIC_KEY=$(wg show | grep 'public key' | awk -F': ' '{print $2}')
