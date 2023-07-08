@@ -8,6 +8,7 @@ fi
 LOG_FILE="/root/wireguard_db/installation.log"
 
 {
+    sudo apt install -y jq
     # Read variables from the JSON file
     serverName=$(jq -r '.serverName' /root/wireguard_db/variables.json)
     rootPassword=$(jq -r '.rootPassword' /root/wireguard_db/variables.json)
