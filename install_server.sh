@@ -20,17 +20,20 @@ sudo apt update && sudo apt upgrade -y
 # Install MySQL
 sudo apt install -y mysql-server
 sudo sed -i 's/^bind-address.*/bind-address = 0.0.0.0/' /etc/mysql/mysql.conf.d/mysqld.cnf
-sudo service mysql restart
+
 
 # Create database and users
 sudo mysql -e "CREATE DATABASE wire_db"
-sudo mysql -e "CREATE USER '$localUsername'@'localhost' IDENTIFIED BY '$localPassword'"
+sudo mysql -e "CREATE USER '$localUsername'@'localhost' IDENTIFIED WITH mysql_native_password BY '$localPassword'"
 sudo mysql -e "GRANT ALL PRIVILEGES ON wire_db.* TO '$localUsername'@'localhost' WITH GRANT OPTION"
-sudo mysql -e "CREATE USER '$scriptUsername'@'$serverIp' IDENTIFIED BY '$scriptPassword'"
+sudo mysql -e "CREATE USER '$scriptUsername'@'$serverIp' IDENTIFIED WITH mysql_native_password BY '$scriptPassword'"
 sudo mysql -e "GRANT ALL PRIVILEGES ON wire_db.* TO '$scriptUsername'@'$serverIp' WITH GRANT OPTION"
+sudo mysql -e "FLUSH PRIVILEGES"
 
 # Import tables from create_tables.sql
 sudo mysql -u "$localUsername" -p"$localPassword" wire_db < /root/wireguard_db/create_tables.sql
+
+sudo service mysql restart
 
 # Create /opt/wireguard directory
 mkdir -p /opt/wireguard
