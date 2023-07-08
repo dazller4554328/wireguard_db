@@ -4,34 +4,43 @@ if [ ! -f "/root/wireguard_db/variables.json" ]; then
     exit 1
 fi
 
-# Read variables from the JSON file
-serverName=$(jq -r '.serverName' /root/wireguard_db/variables.json)
-rootPassword=$(jq -r '.rootPassword' /root/wireguard_db/variables.json)
-serverIp=$(jq -r '.serverIp' /root/wireguard_db/variables.json)
-adminEmail=$(jq -r '.adminEmail' /root/wireguard_db/variables.json)
-localUsername=$(jq -r '.localUsername' /root/wireguard_db/variables.json)
-localPassword=$(jq -r '.localPassword' /root/wireguard_db/variables.json)
-scriptUsername=$(jq -r '.scriptUsername' /root/wireguard_db/variables.json)
-scriptPassword=$(jq -r '.scriptPassword' /root/wireguard_db/variables.json)
-apiKey=$(jq -r '.apiKey' /root/wireguard_db/variables.json)
-# Update system packages
-sudo apt update && sudo apt upgrade -y
+# Define log file
+LOG_FILE="/root/wireguard_db/installation.log"
 
-# Install MySQL
-sudo apt install -y mysql-server
-sudo sed -i 's/^bind-address.*/bind-address = 0.0.0.0/' /etc/mysql/mysql.conf.d/mysqld.cnf
+{
+    # Read variables from the JSON file
+    serverName=$(jq -r '.serverName' /root/wireguard_db/variables.json)
+    rootPassword=$(jq -r '.rootPassword' /root/wireguard_db/variables.json)
+    serverIp=$(jq -r '.serverIp' /root/wireguard_db/variables.json)
+    adminEmail=$(jq -r '.adminEmail' /root/wireguard_db/variables.json)
+    localUsername=$(jq -r '.localUsername' /root/wireguard_db/variables.json)
+    localPassword=$(jq -r '.localPassword' /root/wireguard_db/variables.json)
+    scriptUsername=$(jq -r '.scriptUsername' /root/wireguard_db/variables.json)
+    scriptPassword=$(jq -r '.scriptPassword' /root/wireguard_db/variables.json)
+    apiKey=$(jq -r '.apiKey' /root/wireguard_db/variables.json)
+    # Update system packages
+    sudo apt update && sudo apt upgrade -y
 
+    # Install MySQL
+    sudo apt install -y mysql-server
+    sudo sed -i 's/^bind-address.*/bind-address = 0.0.0.0/' /etc/mysql/mysql.conf.d/mysqld.cnf
 
-# Create database and users
-sudo mysql -e "CREATE DATABASE wire_db"
-sudo mysql -e "CREATE USER '$localUsername'@'localhost' IDENTIFIED WITH mysql_native_password BY '$localPassword'"
-sudo mysql -e "GRANT ALL PRIVILEGES ON wire_db.* TO '$localUsername'@'localhost' WITH GRANT OPTION"
-sudo mysql -e "CREATE USER '$scriptUsername'@'$serverIp' IDENTIFIED WITH mysql_native_password BY '$scriptPassword'"
-sudo mysql -e "GRANT ALL PRIVILEGES ON wire_db.* TO '$scriptUsername'@'$serverIp' WITH GRANT OPTION"
-sudo mysql -e "FLUSH PRIVILEGES"
-sleep 5
-# Import tables from create_tables.sql
-sudo mysql -u "$localUsername" -p"$localPassword" wire_db < /root/wireguard_db/create_tables.sql
+    # Create database and users
+    sudo mysql -e "CREATE DATABASE wire_db"
+    sudo mysql -e "CREATE USER '$localUsername'@'localhost' IDENTIFIED WITH mysql_native_password BY '$localPassword'"
+    sudo mysql -e "GRANT ALL PRIVILEGES ON wire_db.* TO '$localUsername'@'localhost' WITH GRANT OPTION"
+    sudo mysql -e "CREATE USER '$scriptUsername'@'$serverIp' IDENTIFIED WITH mysql_native_password BY '$scriptPassword'"
+    sudo mysql -e "GRANT ALL PRIVILEGES ON wire_db.* TO '$scriptUsername'@'$serverIp' WITH GRANT OPTION"
+    sudo mysql -e "FLUSH PRIVILEGES"
+    sleep 5
+    # Import tables from create_tables.sql
+    sudo mysql -u "$localUsername" -p"$localPassword" wire_db < /root/wireguard_db/create_tables.sql
+
+    sudo service mysql restart
+} &> "$LOG_FILE"  # Redirect stdout and stderr to log file
+
+echo "Script completed, logs can be found in $LOG_FILE"
+
 
 sudo service mysql restart
 
@@ -49,19 +58,11 @@ $dbName = 'wire_db';
 $apiKey = '$apiKey';
 ?>
 EOF"
-
-sleep 5
-
 sudo apt install wget -y
 # Copy the wireguard.sh script to the root folder
 sudo wget -O /root/wireguard.sh https://get.vpnsetup.net/wg
-
-# Provide execution permissions to the script
-sudo chmod +x /root/wireguard.sh
-
 # Run the script with the --auto option
 sudo bash /root/wireguard.sh --auto
-sleep 5
 # Extract WireGuard public key
 PUBLIC_KEY=$(wg show | grep 'public key' | awk -F': ' '{print $2}')
 
