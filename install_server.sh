@@ -5,9 +5,9 @@ if [ ! -f "/root/wireguard_db/variables.json" ]; then
 fi
 
 # Define log file
-LOG_FILE="/root/wireguard_db/installation.log"
+#LOG_FILE="/root/wireguard_db/installation.log"
 
-{
+#{
     sudo apt install -y jq
     # Read variables from the JSON file
     serverName=$(jq -r '.serverName' /root/wireguard_db/variables.json)
@@ -40,11 +40,9 @@ LOG_FILE="/root/wireguard_db/installation.log"
     sudo mysql -u "$localUsername" -p"$localPassword" wire_db < /root/wireguard_db/create_tables.sql
 
     sudo service mysql restart
-} &> "$LOG_FILE"  # Redirect stdout and stderr to log file
+#} &> "$LOG_FILE"  # Redirect stdout and stderr to log file
 
-echo "Script completed, logs can be found in $LOG_FILE"
-
-
+#echo "Script completed, logs can be found in $LOG_FILE"
 sudo service mysql restart
 
 # Create /opt/wireguard directory
