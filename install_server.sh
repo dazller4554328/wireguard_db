@@ -5,9 +5,9 @@ if [ ! -f "/root/wireguard_db/variables.json" ]; then
 fi
 
 # Define log file
-#LOG_FILE="/root/wireguard_db/installation.log"
+LOG_FILE="/root/wireguard_db/installation.log"
 
-#{
+{
     sudo apt install -y jq
     # Read variables from the JSON file
     serverName=$(jq -r '.serverName' /root/wireguard_db/variables.json)
@@ -143,6 +143,7 @@ sudo systemctl reload apache2
 # Clone the Git repository
 sudo apt-get install -y git
 sudo git clone https://github.com/dazller4554328/wireguard_api.git /var/www/api/wireguard_api
+} &> "$LOG_FILE"  # Redirect stdout and stderr to log file
 
 
 
