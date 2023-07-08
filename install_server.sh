@@ -62,6 +62,7 @@ EOF"
 sudo apt install wget -y
 # Copy the wireguard.sh script to the root folder
 sudo wget -O /root/wireguard.sh https://get.vpnsetup.net/wg
+sleep 2
 # Run the script with the --auto option
 sudo bash /root/wireguard.sh --auto
 # Extract WireGuard public key
