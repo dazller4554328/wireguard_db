@@ -42,13 +42,15 @@ mkdir -p /opt/wireguard
 sudo bash -c "cat > /opt/wireguard/config.php <<EOF
 <?php
 // MySQL configuration
-\$dbHost = 'localhost';
-\$dbUsername = '$localUsername';
-\$dbPassword = '$localPassword';
-\$dbName = 'wire_db';
-\$apiKey = '$apiKey';
+$dbHost = 'localhost';
+$dbUsername = '$localUsername';
+$dbPassword = '$localPassword';
+$dbName = 'wire_db';
+$apiKey = '$apiKey';
 ?>
 EOF"
+
+sleep 5
 
 sudo apt install wget -y
 # Copy the wireguard.sh script to the root folder
@@ -59,7 +61,7 @@ sudo chmod +x /root/wireguard.sh
 
 # Run the script with the --auto option
 sudo bash /root/wireguard.sh --auto
-
+sleep 5
 # Extract WireGuard public key
 PUBLIC_KEY=$(wg show | grep 'public key' | awk -F': ' '{print $2}')
 
