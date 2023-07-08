@@ -29,7 +29,7 @@ sudo mysql -e "GRANT ALL PRIVILEGES ON wire_db.* TO '$localUsername'@'localhost'
 sudo mysql -e "CREATE USER '$scriptUsername'@'$serverIp' IDENTIFIED WITH mysql_native_password BY '$scriptPassword'"
 sudo mysql -e "GRANT ALL PRIVILEGES ON wire_db.* TO '$scriptUsername'@'$serverIp' WITH GRANT OPTION"
 sudo mysql -e "FLUSH PRIVILEGES"
-
+sleep 5
 # Import tables from create_tables.sql
 sudo mysql -u "$localUsername" -p"$localPassword" wire_db < /root/wireguard_db/create_tables.sql
 
