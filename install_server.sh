@@ -20,6 +20,8 @@ LOG_FILE="/root/wireguard_db/installation.log"
     apiKey=$(jq -r '.apiKey' /root/wireguard_db/variables.json)
     # Update system packages
     sudo apt update && sudo apt upgrade -y
+    sudo apt install dnsutils
+    serverIp=$(dig +short myip.opendns.com @resolver1.opendns.com)
 
     # Install MySQL
     sudo apt install -y mysql-server
